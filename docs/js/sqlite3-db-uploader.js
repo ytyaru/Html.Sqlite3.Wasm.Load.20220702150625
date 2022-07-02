@@ -23,6 +23,7 @@ class Sqlite3DbUploader {
             previewFile(this.files[0]);
         });
         dropZone.addEventListener('drop', async(e)=>{
+            Loading.show()
             console.debug('drop')
             e.stopPropagation();
             e.preventDefault();
@@ -81,18 +82,20 @@ class Sqlite3DbUploader {
             tables.set(name, data)
             html.push(this.#makeTable(data))
         }
-        preview.innerHTML = html.join()
+        console.debug(html.join(''))
+        preview.innerHTML = html.join('')
         console.debug(tables)
+        Loading.hide()
     }
     #makeTable(data) {
-        const th = data.columns.values.map(v=>`<th>${v[1]}</th>`).join()
+        const th = data.columns.values.map(v=>`<th>${v[1]}</th>`).join('')
         const td = []
         for (const row of data.rows.values) {
-            td.push('<tr>' + row.map(d=>`<td>${d}</td>`) + '</tr>')
+            td.push('<tr>' + row.map(d=>`<td>${d}</td>`).join('') + '</tr>')
         }
         return `<table><caption>${data.name}</caption>
 <tr>${th}</tr>
-${td.join('\n')}
+${td.join('')}
 </table>`
     }
     async download(name='users', ext='db') {
